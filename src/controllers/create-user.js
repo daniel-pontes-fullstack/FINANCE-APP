@@ -1,4 +1,5 @@
 import { CreateUserUseCase } from '../use-cases/create-user.js'
+import { badRequest } from './helpers.js'
 import validator from 'validator'
 
 export class CreateUserController {
@@ -14,33 +15,18 @@ export class CreateUserController {
             ]
             for (const field of requireFields) {
                 if (!params[field] || params[field].trim().length == 0) {
-                    return {
-                        statusCode: 400,
-                        body: {
-                            errorMessage: `Missing param: ${field}`,
-                        },
-                    }
+                    return badRequest(`Missing param: ${field}`)
                 }
             }
 
             const passwordValid = params.password.length < 6
             if (passwordValid) {
-                return {
-                    statusCode: 400,
-                    body: {
-                        errorMessage: 'Password must be at least 6 characters',
-                    },
-                }
+                return badRequest('Password must be at least 6 characters')
             }
+
             const emailIsValid = validator.isEmail(params.email)
             if (!emailIsValid) {
-                return {
-                    statusCode: 400,
-                    body: {
-                        errorMessage:
-                            'Invalid e-mail. Prease provide a valid one.',
-                    },
-                }
+                return badRequest('Invalid e-mail. Prease provide a valid one.')
             }
 
             // Chamar o use case

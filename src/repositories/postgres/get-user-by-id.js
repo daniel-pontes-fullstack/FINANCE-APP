@@ -1,5 +1,4 @@
 import { PostgresHelper } from '../../db/postgres/helper.js'
-import {} from './create-user'
 
 export class PostgresGetUserByRepository {
     async execute(userId) {
